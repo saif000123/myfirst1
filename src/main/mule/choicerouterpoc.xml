@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cf5c6de8-8177-4887-a69c-365a66402702" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="choicerouterpocFlow" doc:id="a32bab17-ebf7-4d6a-bed2-b00a58b2a9cb" >
+		<http:listener doc:name="Listener" doc:id="732f0aab-45a1-4b2f-8a9a-757f7cc3a285" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3ea58601-6fc7-4f67-ae09-1a159cbb0b75" />
+		<choice doc:name="Choice" doc:id="55e48144-f064-4df4-9948-9916a3125542" >
+			<when expression="5&gt;3">
+				<ee:transform doc:name="Transform Message" doc:id="6e241dea-76a6-4c11-8414-cbcb4701c5ac" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/jason
+---
+"i m choice router i choose the route where condition is right"]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<set-payload value="i m in default route" doc:name="Set Payload" doc:id="8c1fde39-1a87-482f-857e-e240dfe050bd" />
+			</otherwise>
+		</choice>
+	</flow>
+</mule>
